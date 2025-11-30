@@ -1,0 +1,45 @@
+.list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style-type: none;
+    padding: 0 1rem; /* adds outer side padding */
+    gap: 1rem;       /* adds consistent horizontal/vertical space between items */
+}
+
+.list li a {
+    height: 22.5rem;
+    width: 20rem;
+    border: 1px solid #e5dede;
+    border-radius: 1rem;
+    margin: 0.5rem; /* you can change to: margin: 0.5rem 1rem; for more horizontal space */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    color: #e72929;
+}
+
+.image {
+    object-fit: cover;
+    height: 14.5rem;
+}
+
+.content {
+    margin-top: 0.5rem;
+    padding: 0 1rem;
+    position: relative;
+    height: 7rem;
+}
+
+.price {
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
+    font-size: 1.2rem;
+    padding: 0.3rem 100% 0 0; 
+    color: #414141;
+    margin-top: 0.7 rem;
+    background-color: white;
+
+}

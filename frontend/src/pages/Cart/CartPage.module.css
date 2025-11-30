@@ -1,0 +1,130 @@
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.list{
+    display: flex;
+    flex-direction: column;
+    flex: 3 0;
+    justify-content: space-evenly;
+    border: 1px solid #ffbbbb;
+    list-style-type: none;
+    margin: 0.5;
+    padding: 0;
+}
+
+.list li{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.list li:last-child{
+    border-bottom: none;
+}
+
+.list li img{
+    width: 5rem;
+    height: 5rem;
+    border-radius: 100rem;
+    object-fit: cover;
+}
+
+.list li div{
+    padding: 1rem;
+}
+
+.list li div:not(:first-child){
+    flex-basis: 18%;
+
+}
+
+.list li select{
+    width: 3rem;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid lightgrey;
+    font-size: 1rem;
+    font-weight: 100;
+        
+}
+
+.list .remove_button{
+    border-radius: 1rem;
+    border: none;
+    padding: 0.5rem;
+    color: red;
+    opacity: 0.7;
+    outline: none;
+
+}
+
+.list .remove_button:hover{
+    cursor: pointer;
+    opacity: 1;
+}
+
+.checkout{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #ffbbbb;
+    border-radius: 0.5rem;
+}
+
+.checkout > div{
+    font-size: 1.4rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.checkout_action{
+    width: 100%;
+}
+
+.checkout .food_count{
+    margin-bottom: 1.5rem;
+
+}
+
+.checkout .food_count::before{
+    content: "Total Items: ";
+    font-weight: 600;
+}
+
+.checkout .total_price::before{
+    content: "Total Price: ";
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+
+}
+
+.checkout a{
+    padding: 1rem;
+    color: white;
+    background: #e72929;
+    display: block;
+    width: 99%;
+    border-radius: 1rem;
+    text-align: center;
+    justify-self: center;
+}
+
+.checkout a:hover{
+    text-decoration: none;
+    opacity: 0.8;
+    cursor: pointer;
+    background: #c61c1c;
+}   

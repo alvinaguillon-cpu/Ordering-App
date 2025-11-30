@@ -1,17 +1,13 @@
 import React from 'react';
-import { Link, Links } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import classes from './header.module.css';
+import { useCart } from '../../hooks/useCart';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function Header() {
-    const user = {
-        name: 'John Doe',
-    };
+    const {user, logout} = useAuth();
 
-    const cart = {
-        totalCount: 10,
-    };
-
-    const logout = () => {}
+    const {cart} = useCart();
 
 
   return (
