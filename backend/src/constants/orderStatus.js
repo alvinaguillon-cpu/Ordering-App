@@ -1,0 +1,7 @@
+export const OrderStatus ={
+    PENDING: 'PENDING',
+    PAID: 'PAID',
+    READY_FOR_PICKUP: 'READY FOR PICKUP',
+    COMPLETED: 'COMPLETED',
+    CANCELLED: 'CANCELLED',
+}
