@@ -26,15 +26,15 @@ router.post('/login', handler(async (req, res) => {
 );
 
 router.post(
-    '/register',
-    handler(async (req, res) => {
-        const { name, email, password } = req.body;
+  '/register',
+  handler(async (req, res) => {
+    const { name, email, password, role } = req.body;
 
-        const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email });
 
-        if (user) {
-            res.status(BAD_REQUEST).send('User already exists, please login!');
-            return;
+    if (user) {
+      res.status(BAD_REQUEST).send('User already exists, please login!');
+      return;
     }
 
     const hashedPassword = await bcrypt.hash(
@@ -42,16 +42,27 @@ router.post(
       PASSWORD_HASH_SALT_ROUNDS
     );
 
+    const finalRole = 'CUSTOMER';
     const newUser = {
       name,
       email: email.toLowerCase(),
       password: hashedPassword,
+      role: finalRole,
     };
 
-    const result = await UserModel.create(newUser);
-    res.send(generateTokenResponse(result));
+    // ✅ FIX: ADDED TRY/CATCH BLOCK
+    try {
+      const result = await UserModel.create(newUser);
+      res.send(generateTokenResponse(result));
+    } catch (error) {
+      // Log the error for debugging
+      console.error('Mongoose Registration Error:', error.message); 
+      // Send a proper bad request response
+      res.status(BAD_REQUEST).send('Registration failed due to invalid data.');
+    }
   })
 );
+
 const generateTokenResponse = (user) => {
     const token = jwt.sign({
         id: user.id,
@@ -71,8 +82,8 @@ return {
     name: user.name, 
     role: user.role,
     wallet: user.wallet,
-    address: user.address,
     isAdmin: user.isAdmin,
+    isActive: user.isActive,
     token, 
     };
 };

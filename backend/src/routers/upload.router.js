@@ -10,7 +10,7 @@ const upload = multer({ dest: 'uploads/' });
 
 
 router.post(
-  '/upload', 
+  '/', 
   upload.single('image'), 
   handler(async (req, res) => {
     if (!req.file) {

@@ -14,20 +14,15 @@ export const OrderItemSchema = new Schema(
   }
 );
 
-OrderItemSchema.pre('validate', function (next) {
-  this.price = this.food.price * this.quantity;
-  next();
-});
-
 const orderSchema = new Schema(
   {
     name: { type: String, required: true },
     paymentId: { type: String },
     totalPrice: { type: Number, required: true },
     items: { type: [OrderItemSchema], required: true },
-    status: { type: String, default: OrderStatus.PENDING },
+    status: { type: String, default: OrderStatus.PENDING, enum: Object.values(OrderStatus) },
     user: { type: Schema.Types.ObjectId, required: true, ref: 'user' },
-    customerPictureUrl: {type: String, required: true},
+    customerPictureUrl: {type: String,},
   },
   {
     timestamps: true,

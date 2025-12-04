@@ -14,7 +14,10 @@ router.post(
   handler(async (req, res) => {
     const order = req.body;
 
-    if (order.items.length <= 0) res.status(BAD_REQUEST).send('Cart Is Empty!');
+    // FIX 1: Ensure 'return' is used to stop execution if cart is empty
+    if (order.items.length <= 0) {
+      return res.status(BAD_REQUEST).send('Cart Is Empty!'); 
+    }
 
     await OrderModel.deleteOne({
       user: req.user.id,
@@ -22,8 +25,15 @@ router.post(
     });
 
     const newOrder = new OrderModel({ ...order, user: req.user.id });
-    await newOrder.save();
-    res.send(newOrder);
+    
+    // ✅ FIX 2: ADDED TRY/CATCH BLOCK to prevent server crash on Mongoose validation error
+    try {
+        await newOrder.save();
+        res.send(newOrder);
+    } catch (error) {
+        console.error("Mongoose Order Validation Error:", error.message);
+        res.status(BAD_REQUEST).send('Order creation failed due to validation.');
+    }
   })
 );
 

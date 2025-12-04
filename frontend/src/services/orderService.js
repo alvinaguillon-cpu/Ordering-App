@@ -1,16 +1,44 @@
 import axios from 'axios';
+import { getUser } from './userService'; 
 
 export const createOrder = async order => {
   try {
-    const { data } = await axios.post('/api/orders/create', order);
+    const authUser = getUser();
+    
+    if (!authUser || !authUser.token) {
+       console.error("Authentication Error: Token missing in getUser()"); 
+        throw new Error("User not authenticated or token missing.");
+    }
+
+    console.log("Token being sent:", authUser.token); 
+
+    const config = {
+  
+      headers: {
+        Authorization: `Bearer ${authUser.token}`,
+      },
+    };
+
+    const { data } = await axios.post('/api/orders/create', order, config); 
     return data;
-  } catch (error) {}
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getNewOrderForCurrentUser = async () => {
-  const { data } = await axios.get('/api/orders/newOrderForCurrentUser');
-  return data;
+
+    const authUser = getUser();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${authUser?.token}`,
+      },
+    };
+
+    const { data } = await axios.get('/api/orders/newOrderForCurrentUser', config);
+    return data;
 };
+
 
 // export const pay = async paymentId => {
 //   try {

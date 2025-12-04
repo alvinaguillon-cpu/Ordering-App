@@ -26,28 +26,33 @@ export default function CheckoutPage() {
     } = useForm();
 
     const submit = async data => {
-        if (!imageFile) {
-            toast.warning('Please upload a picture for identification.');
-            return;
-        }
+        // ... imageFile check ...
 
         try {
             const customerPictureUrl= await uploadImage(imageFile);
             
             if (!customerPictureUrl){
+                // If uploadImage failed (returned null), stop here.
                 return;
             }
             
-            await createOrder({ 
+            const newOrder = await createOrder({ // Capture the result
                 ...order, 
-                name: data.name, 
-                address: data.address, 
-                customerPictureUrl, 
+                ...data, 
+                customerPictureUrl
             });
+            
+            // ✅ Only navigate if the newOrder object is returned successfully
+            if (newOrder && newOrder.id) {
+                 navigate('/payment');
+            } else {
+                 // Fallback for unexpected failures
+                 toast.error('Order creation failed due to an unknown server error.');
+            }
 
-            navigate('/payment');
         } catch (error) {
-            toast.error('Image upload or order creation failed.');
+            // ✅ This catches the error thrown from orderService on a BAD_REQUEST response
+            toast.error(error.response?.data || 'Order submission failed.');
         }
     };
 

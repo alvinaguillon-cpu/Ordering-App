@@ -1,38 +1,41 @@
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-export const uploadImage = async event => {
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
+
+
+export const uploadImage = async (file) => { 
   let toastId = null;
 
-  const image = await getImage(event);
-  if (!image) return null;
-
+ 
+  if (!file || !ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    toast.error('Invalid file or file type', 'File Upload Error');
+    return null;
+  }
+  
   const formData = new FormData();
-  formData.append('image', image, image.name);
-  const response = await axios.post('api/upload', formData, {
-    onUploadProgress: ({ progress }) => {
-      if (toastId) toast.update(toastId, { progress });
-      else toastId = toast.success('Uploading...', { progress });
-    },
-  });
-  toast.dismiss(toastId);
-  return response.data.url;
-};
+  formData.append('image', file, file.name);
+  
+  try {
+   
+    toastId = toast.success('Uploading...', { progress: 0 }); 
 
-const getImage = async event => {
-  const files = event.target.files;
-
-  if (!files || files.length <= 0) {
-    toast.warning('Upload file is nott selected!', 'File Upload');
-    return null;
+    const response = await axios.post('/api/upload', formData, {
+      onUploadProgress: ({ loaded, total }) => {
+        const progress = loaded / total;
+        if (toastId) toast.update(toastId, { progress });
+      },
+    });
+    
+    toast.dismiss(toastId);
+    return response.data.url;
+    
+  } catch (error) {
+   
+    console.error("Image Upload Failed:", error.response?.data || error.message);
+    toast.dismiss(toastId);
+    
+    
+    throw new Error('Image upload failed due to network or server issue.'); 
   }
-
-  const file = files[0];
-
-  if (file.type !== 'image/jpeg') {
-    toast.error('Only JPG type is allowed', 'File Type Error');
-    return null;
-  }
-
-  return file;
 };
